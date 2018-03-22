@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMarshalStruct(t *testing.T) {
+func TestMarshalSimpleStruct(t *testing.T) {
 	v := struct {
 		ID         uint
 		Name       string
@@ -17,4 +17,21 @@ func TestMarshalStruct(t *testing.T) {
 	data, err := Marshal(v)
 	assert.NoError(t, err)
 	assert.Equal(t, `{"id":1,"name":"duck","price":15000,"is_new":true,"category_id":14}`, string(data))
+}
+
+func TestMarshalNestedStruct(t *testing.T) {
+	type Category struct {
+		ID   uint
+		Name string
+	}
+	v := struct {
+		ID       uint
+		Name     string
+		Price    float64
+		IsNew    bool
+		Category Category
+	}{1, "duck", 15000, true, Category{14, "food"}}
+	data, err := Marshal(v)
+	assert.NoError(t, err)
+	assert.Equal(t, `{"id":1,"name":"duck","price":15000,"is_new":true,"category":{"id":14,"name":"food"}}`, string(data))
 }
