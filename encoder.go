@@ -20,9 +20,16 @@ func preKeySnakeCaser(preKey string) string {
 }
 
 func keySnakeCaser(key string) string {
-	return patternCamel.ReplaceAllStringFunc(" "+key, snakeCaser)[2:]
+	if isUpper(key[0]) {
+		return patternCamel.ReplaceAllStringFunc(" "+key, snakeCaser)[2:]
+	}
+	return key
 }
 
 func snakeCaser(s string) string {
 	return s[:1] + "_" + strings.ToLower(s[1:])
+}
+
+func isUpper(c byte) bool {
+	return 'A' <= c && c <= 'Z'
 }

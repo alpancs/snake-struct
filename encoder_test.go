@@ -35,3 +35,13 @@ func TestMarshalNestedStruct(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, `{"id":1,"name":"duck","price":15000,"is_new":true,"category":{"id":14,"name":"food"}}`, string(data))
 }
+
+func TestMarshalEtc(t *testing.T) {
+	v := struct {
+		HTTPServer  string `json:"http_server"`
+		CategoryIDs []uint
+	}{"localhost", []uint{14}}
+	data, err := Marshal(v)
+	assert.NoError(t, err)
+	assert.Equal(t, `{"http_server":"localhost","category_ids":[14]}`, string(data))
+}
